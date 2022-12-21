@@ -39,13 +39,13 @@ Here's what you'll need to make it work on your machine.
 
 # Usage
 
-0. Create a Python virtual environment called "my-venv".
+1. Create a Python virtual environment called "my-venv".
 ```
 python3 -m venv ./my-venv
 source my-venv/bin/activate
 ```
 
-1. Set environment variables.
+2. Set environment variables.
 ```
 export AWS_REGION=us-east-1
 export AWS_PROFILE=localstack
@@ -60,32 +60,32 @@ export PORT=5432
 export DATABASE=postgres
 ```
 
-2. Install requirements.
+3. Install requirements.
 ```
 make install
 ```
 
-3. Install requirements for unit testing.
+4. Install requirements for unit testing.
 ```
 make install-test
 ```
 
-4. Run unit tests.
+5. Run unit tests.
 ```
 make test
 ```
 
-5. Build the Docker containers and start the services.
+6. Build the Docker containers and start the services.
 ```
 make start
 ```
 
-6. Make sure you can read an SQS queue.
+7. Make sure you can read an SQS queue.
 ```
 make message
 ```
 
-7. Confirm that the DB works.
+8. Confirm that the DB works.
 ```
 make db
 ```
@@ -103,12 +103,12 @@ and
 exit
 ```
 
-8. Run the application.
+9. Run the application.
 ```
 make run
 ```
 
-9. Confirm that there's data in the DB.
+10. Confirm that there's data in the DB.
 ```
 make db
 [PASSWORD]
@@ -118,12 +118,12 @@ exit
 
 With any luck, there should be ninety-nine (99) rows.
 
-10. Stop the services.
+11. Stop the services.
 ```
 make stop
 ```
 
-11. Clean up all things Docker, **including all volumes**, if you want.
+12. Clean up all things Docker, **including all volumes**, if you want.
 ```
 make clean
 ```
