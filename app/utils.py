@@ -100,7 +100,7 @@ def process_message(d: dict) -> dict:
 
     Returns:
         The same dictionary with allkeys user_id, app_version,
-        device_type, ip, masked_ip, device_id, masked_device_id, 
+        device_type, ip, masked_ip, device_id, masked_device_id,
         locale, and create_date.
     """
 
