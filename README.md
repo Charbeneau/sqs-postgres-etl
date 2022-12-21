@@ -75,17 +75,17 @@ make install-test
 make test
 ```
 
-4. Build the Docker containers and start the services.
+5. Build the Docker containers and start the services.
 ```
 make start
 ```
 
-5. Make sure you can read an SQS queue.
+6. Make sure you can read an SQS queue.
 ```
 make message
 ```
 
-6. Confirm that the DB works.
+7. Confirm that the DB works.
 ```
 make db
 ```
@@ -103,12 +103,12 @@ and
 exit
 ```
 
-7. Run the application.
+8. Run the application.
 ```
 make run
 ```
 
-8. Confirm that there's data in the DB.
+9. Confirm that there's data in the DB.
 ```
 make db
 [PASSWORD]
@@ -118,12 +118,12 @@ exit
 
 With any luck, there should be ninety-nine (99) rows.
 
-9. Stop the services.
+10. Stop the services.
 ```
 make stop
 ```
 
-10. Clean up all things Docker, **including all volumes**, if you want.
+11. Clean up all things Docker, **including all volumes**, if you want.
 ```
 make clean
 ```
