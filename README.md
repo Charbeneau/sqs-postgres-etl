@@ -179,7 +179,7 @@ PII can be recovered by Base64 decoding the relevant fields. Again, I did the si
 
 After looking at the data a bit, I decided to assume that the SQS message body had to follow the schema in [utils.py](./app/utils.py).  There's an implicit [contract](https://developer.confluent.io/patterns/event/data-contract/) in all event data, and that one made sense to me.
 
-I chose to make all **changes** to the data explicit in [process_message()](./app/src/utils.py).  However, Psycopg does its [thing](https://www.psycopg.org/docs/usage.html#query-parameters) with create_date, because it's a new data element.  
+I chose to make all **changes** to the data explicit in [process_message()](./app/utils.py).  However, Psycopg does its [thing](https://www.psycopg.org/docs/usage.html#query-parameters) with create_date, because it's a new data element.  
 
 When working with data, I tend to think in terms of a directed acyclical graph ("DAG").  Or a Flow, if you like [Prefect](https://docs-v1.prefect.io/core/concepts/flows.html#overview).  As a result, my code tends to be rather DAG or Flow-like.
 
