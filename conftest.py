@@ -1,6 +1,7 @@
 from pytest import fixture
+from loguru import logger
 
 
 @fixture
 def global_fixture():
-    print("\n(Doing global fixture setup stuff!)")
+    logger.info("\n(Doing global fixture setup stuff!)")

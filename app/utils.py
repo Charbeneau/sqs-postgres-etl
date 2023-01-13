@@ -6,18 +6,16 @@ import jsonschema
 from datetime import datetime
 import time
 from signal import SIGINT, SIGTERM, signal
-import logging
-import sys
+from loguru import logger
+import boto3
 
 
-logger = logging.getLogger(__file__)
-logger.setLevel(logging.INFO)
-
-handler = logging.StreamHandler(sys.stdout)
-handler.setLevel(logging.INFO)
-formatter = logging.Formatter("%(asctime)s - %(name)s - %(levelname)s - %(message)s")
-handler.setFormatter(formatter)
-logger.addHandler(handler)
+AWS_PROFILE = os.getenv("AWS_PROFILE")
+AWS_REGION = os.getenv("AWS_REGION")
+ENDPOINT_URL = os.getenv("ENDPOINT_URL")
+QUEUE_NAME = os.getenv("QUEUE_NAME")
+MAX_MESSAGES = int(os.getenv("MAX_MESSAGES"))
+WAIT_TIME = int(os.getenv("WAIT_TIME"))
 
 
 SCHEMA = {
@@ -34,6 +32,20 @@ SCHEMA = {
     },
     "required": ["user_id", "app_version", "device_type", "ip", "locale", "device_id"],
 }
+
+
+def setup_boto3(profile_name: str=AWS_PROFILE):
+    """Sets up a boto3 session.
+
+    Args:
+        profile_name: AWS profile name.
+
+    Returns:
+        Nothing.
+    """
+
+    logger.info("Setting up boto3 default session.")
+    boto3.setup_default_session(profile_name=profile_name)
 
 
 def encode_string(string: str) -> str:
@@ -74,7 +86,7 @@ def validate_message(message) -> None:
     Returns:
         A dictionary representation of the message if it's valid.
     """
-    print(f"\nmessage_id: {message.message_id}")
+    logger.info(f"\nmessage_id: {message.message_id}")
 
     d = json.loads(message.body)
 
@@ -177,5 +189,37 @@ class SignalHandler:
         signal(SIGTERM, self._signal_handler)
 
     def _signal_handler(self, signal, frame):
-        print(f"Handling signal {signal}, exiting gracefully.")
+        logger.info(f"Handling signal {signal}, exiting gracefully.")
         self.received_signal = True
+
+def main():
+    """Wraps the functions of the app.
+
+    Args:
+        None.
+
+    Returns:
+        Nothing.
+    """
+
+    setup_boto3()
+    sqs = boto3.resource("sqs", region_name=AWS_REGION, endpoint_url=ENDPOINT_URL)
+    queue = sqs.get_queue_by_name(QueueName=QUEUE_NAME)
+
+    signal_handler = SignalHandler()
+    while not signal_handler.received_signal:
+        messages = queue.receive_messages(
+            MaxNumberOfMessages=MAX_MESSAGES, WaitTimeSeconds=WAIT_TIME
+        )
+        for message in messages:
+            try:
+                d = validate_message(message)
+                record = process_message(d)
+                insert_record_into_db(record)
+            except Exception as e:
+
+                logger.error(f"Exception while processing message: {repr(e)}!")
+
+                continue
+
+            message.delete()
