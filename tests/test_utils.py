@@ -1,4 +1,4 @@
-from app.utils import encode_string
+from app.transform import encode_string
 
 
 def test_encode_string():
