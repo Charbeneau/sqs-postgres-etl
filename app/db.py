@@ -1,6 +1,7 @@
 import os
 import psycopg2
 from loguru import logger
+from models import UserLogin
 
 
 def create_db_connection():
