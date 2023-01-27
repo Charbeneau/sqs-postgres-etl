@@ -19,6 +19,7 @@ class UserLogin(Model):
     """
 
     __tablename__ = "user_logins"
+    # Things didn't work when I changed Integer to String for id, although it's defined as serial primary key in scripts/create_table.sql and is a UUID.  Go figure.
     id = Column(Integer, primary_key=True)
     user_id = Column("user_id", String(128))
     device_type = Column("device_type", String(32))

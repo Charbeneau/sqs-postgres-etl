@@ -4,7 +4,7 @@ from datetime import datetime
 from transform import encode_string, semver_str_to_int
 from models import create_user_login_model
 from validate import validate_message
-from db import insert_record_into_db
+from db import add_user_login_to_db
 import boto3
 from loguru import logger
 
@@ -57,11 +57,10 @@ def handle_message(message) -> None:
         Nothing.
     """
 
-    d = validate_message(message)
-    d = process_message(d)
-    u = create_user_login_model(d)
-    logger.info(f"u: {u}")
-    # insert_record_into_db(record)
+    validated = validate_message(message)
+    processed = process_message(validated)
+    user_login = create_user_login_model(processed)
+    add_user_login_to_db(user_login)
 
 
 def receive_messages() -> None:
